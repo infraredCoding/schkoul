@@ -1,12 +1,13 @@
 package com.imraninfrared.schkoul.course.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.imraninfrared.schkoul.assignments.models.Assignments;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @Entity
@@ -20,4 +21,8 @@ public class Course {
     private String title;
     private String code;
     private String faculty;
+
+    @OneToMany(mappedBy="course", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Assignments> assignmentsList;
 }

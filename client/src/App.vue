@@ -19,6 +19,13 @@ const route = useRoute()
         :class="{ 'bg-accent text-white': route.path === '/courses' }"
         >Courses</RouterLink
       >
+
+      <RouterLink
+        :to="{ name: 'assignments' }"
+        class="text-md text-center rounded-2xl px-5 py-3 mx-5 cursor-pointer"
+        :class="{ 'bg-accent text-white': route.path === '/assignments' }"
+        >Assignments</RouterLink
+      >
     </div>
 
     <RouterView />
