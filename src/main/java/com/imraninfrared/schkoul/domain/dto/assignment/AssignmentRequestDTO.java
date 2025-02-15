@@ -1,4 +1,4 @@
-package com.imraninfrared.schkoul.assignments.dto;
+package com.imraninfrared.schkoul.domain.dto.assignment;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,9 +1,8 @@
 package com.imraninfrared.schkoul.assignments.controllers;
 
 import com.imraninfrared.schkoul.assignments.models.Assignments;
-import com.imraninfrared.schkoul.assignments.dto.AssignmentRequestDTO;
+import com.imraninfrared.schkoul.domain.dto.assignment.AssignmentRequestDTO;
 import com.imraninfrared.schkoul.assignments.services.AssignmentService;
-import com.imraninfrared.schkoul.course.repositories.CourseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

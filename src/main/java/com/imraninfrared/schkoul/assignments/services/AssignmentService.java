@@ -1,6 +1,6 @@
 package com.imraninfrared.schkoul.assignments.services;
 
-import com.imraninfrared.schkoul.assignments.dto.AssignmentRequestDTO;
+import com.imraninfrared.schkoul.domain.dto.assignment.AssignmentRequestDTO;
 import com.imraninfrared.schkoul.assignments.models.Assignments;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
