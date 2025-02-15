@@ -1,6 +1,6 @@
-package com.imraninfrared.schkoul.assignments.repositories;
+package com.imraninfrared.schkoul.repository;
 
-import com.imraninfrared.schkoul.assignments.models.Assignments;
+import com.imraninfrared.schkoul.domain.models.Assignments;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

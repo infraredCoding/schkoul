@@ -1,6 +1,6 @@
-package com.imraninfrared.schkoul.course.services;
+package com.imraninfrared.schkoul.services.course;
 
-import com.imraninfrared.schkoul.course.models.Course;
+import com.imraninfrared.schkoul.domain.models.Course;
 
 import java.util.List;
 

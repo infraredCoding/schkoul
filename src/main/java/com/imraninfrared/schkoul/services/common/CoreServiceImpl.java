@@ -1,7 +1,7 @@
-package com.imraninfrared.schkoul.base.services;
+package com.imraninfrared.schkoul.services.common;
 
-import com.imraninfrared.schkoul.assignments.models.Assignments;
-import com.imraninfrared.schkoul.assignments.repositories.AssignmentRepository;
+import com.imraninfrared.schkoul.domain.models.Assignments;
+import com.imraninfrared.schkoul.repository.AssignmentRepository;
 import com.imraninfrared.schkoul.domain.dto.agenda.AgendaResponseDTO;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class CoreServiceImpl implements CoreService{
+public class CoreServiceImpl implements CoreService {
 
     private final AssignmentRepository assignmentRepository;
 

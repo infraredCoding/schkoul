@@ -1,7 +1,7 @@
-package com.imraninfrared.schkoul.course.controllers;
+package com.imraninfrared.schkoul.controllers;
 
-import com.imraninfrared.schkoul.course.models.Course;
-import com.imraninfrared.schkoul.course.services.CourseService;
+import com.imraninfrared.schkoul.domain.models.Course;
+import com.imraninfrared.schkoul.services.course.CourseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

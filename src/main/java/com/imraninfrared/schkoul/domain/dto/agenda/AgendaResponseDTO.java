@@ -1,6 +1,6 @@
 package com.imraninfrared.schkoul.domain.dto.agenda;
 
-import com.imraninfrared.schkoul.course.models.Course;
+import com.imraninfrared.schkoul.domain.models.Course;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

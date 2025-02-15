@@ -1,7 +1,6 @@
-package com.imraninfrared.schkoul.course.models;
+package com.imraninfrared.schkoul.domain.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.imraninfrared.schkoul.assignments.models.Assignments;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

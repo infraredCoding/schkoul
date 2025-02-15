@@ -1,7 +1,7 @@
-package com.imraninfrared.schkoul.course.services;
+package com.imraninfrared.schkoul.services.course;
 
-import com.imraninfrared.schkoul.course.models.Course;
-import com.imraninfrared.schkoul.course.repositories.CourseRepository;
+import com.imraninfrared.schkoul.domain.models.Course;
+import com.imraninfrared.schkoul.repository.CourseRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,7 @@ import java.util.Optional;
 @Transactional
 @RequiredArgsConstructor
 @Service
-public class CourseServiceImpl implements CourseService{
+public class CourseServiceImpl implements CourseService {
     private final CourseRepository courseRepository;
 
     @Override

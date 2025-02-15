@@ -1,6 +1,6 @@
-package com.imraninfrared.schkoul.base.controllers;
+package com.imraninfrared.schkoul.controllers;
 
-import com.imraninfrared.schkoul.base.services.CoreService;
+import com.imraninfrared.schkoul.services.common.CoreService;
 import com.imraninfrared.schkoul.domain.dto.agenda.AgendaResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

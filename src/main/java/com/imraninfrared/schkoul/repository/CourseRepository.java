@@ -1,7 +1,6 @@
-package com.imraninfrared.schkoul.course.repositories;
+package com.imraninfrared.schkoul.repository;
 
-import com.imraninfrared.schkoul.course.models.Course;
-import jakarta.transaction.Transactional;
+import com.imraninfrared.schkoul.domain.models.Course;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

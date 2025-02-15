@@ -1,10 +1,10 @@
-package com.imraninfrared.schkoul.assignments.services;
+package com.imraninfrared.schkoul.services.assignments;
 
 import com.imraninfrared.schkoul.domain.dto.assignment.AssignmentRequestDTO;
-import com.imraninfrared.schkoul.assignments.models.Assignments;
-import com.imraninfrared.schkoul.assignments.repositories.AssignmentRepository;
-import com.imraninfrared.schkoul.course.models.Course;
-import com.imraninfrared.schkoul.course.repositories.CourseRepository;
+import com.imraninfrared.schkoul.domain.models.Assignments;
+import com.imraninfrared.schkoul.repository.AssignmentRepository;
+import com.imraninfrared.schkoul.domain.models.Course;
+import com.imraninfrared.schkoul.repository.CourseRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import java.util.Optional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class AssignmentServiceImpl implements AssignmentService{
+public class AssignmentServiceImpl implements AssignmentService {
     private final AssignmentRepository assignmentRepository;
     private final CourseRepository courseRepository;
 
