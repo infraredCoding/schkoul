@@ -1,5 +1,5 @@
 <script setup>
-import axios from 'axios'
+import api from '@/axios'
 import { ref, onMounted } from 'vue'
 
 const courses = ref([])
@@ -27,8 +27,8 @@ const toggleDelModal = (_selectedCourse) => {
 }
 
 onMounted(async () => {
-  await axios
-    .get('http://127.0.0.1:8080/api/v1/course')
+  await api
+    .get('/course')
     .then((res) => {
       courses.value = res.data
     })
@@ -36,8 +36,8 @@ onMounted(async () => {
 })
 
 const createCourse = async () => {
-  await axios
-    .post('http://127.0.0.1:8080/api/v1/course', newCourseInfo.value)
+  await api
+    .post('/course', newCourseInfo.value)
     .then((res) => {
       courses.value.push(res.data)
       newCourseInfo.value.code = null
@@ -48,8 +48,8 @@ const createCourse = async () => {
 }
 
 const updateCourse = async () => {
-  await axios
-    .patch(`http://127.0.0.1:8080/api/v1/course/${selectedCourse.value.id}`, selectedCourse.value)
+  await api
+    .patch(`/course/${selectedCourse.value.id}`, selectedCourse.value)
     .then((res) => {
       console.log(res)
       const index = courses.value.findIndex((course) => course.id === selectedCourse.value.id)
@@ -67,8 +67,8 @@ const updateCourse = async () => {
 }
 
 const deleteCourse = async () => {
-  await axios
-    .delete(`http://127.0.0.1:8080/api/v1/course/${selectedCourse.value.id}`)
+  await api
+    .delete(`/course/${selectedCourse.value.id}`)
     .then((res) => {
       courses.value = courses.value.filter((c) => c.id !== selectedCourse.value.id)
 
@@ -79,12 +79,14 @@ const deleteCourse = async () => {
     })
     .catch((err) => console.log(err))
 }
+
+const username = ref(localStorage.getItem('username') || 'N/A')
 </script>
 
 <template>
   <div class="w-full flex flex-col py-5">
     <div class="flex justify-end gap-4">
-      <span class="">infrared</span>
+      <span class="">{{ username }}</span>
     </div>
     <div
       class="h-full w-full bg-base-100 shadow-lg rounded-2xl mt-5 flex flex-col gap-10 px-10 py-5"

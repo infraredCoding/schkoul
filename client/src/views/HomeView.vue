@@ -1,5 +1,5 @@
 <script setup>
-import axios from 'axios'
+import api from '@/axios'
 import { computed, onMounted, ref } from 'vue'
 
 const today = new Date()
@@ -16,8 +16,8 @@ const calculateDateDiff = (date) => {
 const monthlyDue = ref([])
 
 onMounted(async () => {
-  await axios
-    .get('http://127.0.0.1:8080/api/v1/dashboard')
+  await api
+    .get('/dashboard')
     .then((res) => (monthlyDue.value = res.data))
     .catch((err) => console.log(err))
 })
@@ -38,12 +38,14 @@ const weeklyDue = computed(() => {
     return d.getDate() >= startOfWeek.getDate() && d.getDate() <= endOfWeek.getDate()
   })
 })
+
+const username = ref(localStorage.getItem('username') || 'N/A')
 </script>
 
 <template>
   <div class="w-full">
     <div class="flex justify-end gap-4 mb-5">
-      <span class="">infrared</span>
+      <span class="">{{ username }}</span>
     </div>
     <div class="flex gap-5 items-start">
       <div class="w-3/5 card bg-base-100">

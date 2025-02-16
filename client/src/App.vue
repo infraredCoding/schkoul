@@ -1,34 +1,18 @@
 <script setup>
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
+import BaseLayout from '@/layouts/BaseLayout.vue'
 
 const route = useRoute()
+
+const layout = computed(() => route.meta.layout || BaseLayout)
 </script>
+
 <template>
   <main class="mix-w-screen min-h-screen px-5 py-5 flex gap-10 bg-base-200">
-    <div class="w-[350px] bg-base-100 shadow-lg min-h-full flex flex-col rounded-2xl gap-5 pt-5">
-      <RouterLink
-        to="./"
-        class="text-md text-center rounded-2xl px-5 py-3 mx-5"
-        :class="{ 'bg-accent text-white': route.path === '/' }"
-        >Dashboard</RouterLink
-      >
-
-      <RouterLink
-        :to="{ name: 'courses' }"
-        class="text-md text-center rounded-2xl px-5 py-3 mx-5 cursor-pointer"
-        :class="{ 'bg-accent text-white': route.path === '/courses' }"
-        >Courses</RouterLink
-      >
-
-      <RouterLink
-        :to="{ name: 'assignments' }"
-        class="text-md text-center rounded-2xl px-5 py-3 mx-5 cursor-pointer"
-        :class="{ 'bg-accent text-white': route.path === '/assignments' }"
-        >Assignments</RouterLink
-      >
-    </div>
-
-    <RouterView />
+    <component :is="layout">
+      <RouterView />
+    </component>
   </main>
 </template>
 

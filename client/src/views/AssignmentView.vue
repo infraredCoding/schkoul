@@ -1,4 +1,5 @@
 <script setup>
+import api from '@/axios'
 import axios from 'axios'
 import { ref, onMounted } from 'vue'
 
@@ -29,8 +30,8 @@ const toggleDelModal = (_selectedAssignment) => {
 }
 
 onMounted(async () => {
-  await axios
-    .get('http://127.0.0.1:8080/api/v1/assignments')
+  await api
+    .get('/assignments')
     .then((res) => {
       res.data.forEach((el) => {
         el.date = el.date.split('T')[0]
@@ -41,8 +42,8 @@ onMounted(async () => {
 
   try {
     const [coursesRes, assignmentsRes] = await axios.all([
-      axios.get(`http://127.0.0.1:8080/api/v1/course`),
-      axios.get('http://127.0.0.1:8080/api/v1/assignments'),
+      api.get(`/course`),
+      api.get('/assignments'),
     ])
 
     courses.value = coursesRes.data
@@ -53,8 +54,8 @@ onMounted(async () => {
 })
 
 const createAssignment = async () => {
-  await axios
-    .post('http://127.0.0.1:8080/api/v1/assignments', newAssignmentInfo.value)
+  await api
+    .post('/assignments', newAssignmentInfo.value)
     .then((res) => {
       assignments.value.push(res.data)
       newAssignmentInfo.value.title = null
@@ -66,11 +67,8 @@ const createAssignment = async () => {
 }
 
 const updateAssignment = async () => {
-  await axios
-    .patch(
-      `http://127.0.0.1:8080/api/v1/assignments/${selectedAssignment.value.id}`,
-      selectedAssignment.value,
-    )
+  await api
+    .patch(`/assignments/${selectedAssignment.value.id}`, selectedAssignment.value)
     .then((res) => {
       console.log(res)
       const index = assignments.value.findIndex(
@@ -89,8 +87,8 @@ const updateAssignment = async () => {
 }
 
 const deleteAssignment = async () => {
-  await axios
-    .delete(`http://127.0.0.1:8080/api/v1/assignments/${selectedAssignment.value.id}`)
+  await api
+    .delete(`/assignments/${selectedAssignment.value.id}`)
     .then((res) => {
       assignments.value = assignments.value.filter((c) => c.id !== selectedAssignment.value.id)
 
@@ -102,16 +100,16 @@ const deleteAssignment = async () => {
 }
 
 const toggleAssignment = async (toggleAssignmentId) => {
-  await axios
-    .post(`http://127.0.0.1:8080/api/v1/assignments/${toggleAssignmentId}`)
-    .catch((err) => console.log(err))
+  await api.post(`/assignments/${toggleAssignmentId}`).catch((err) => console.log(err))
 }
+
+const username = ref(localStorage.getItem('username') || 'N/A')
 </script>
 
 <template>
   <div class="w-full flex flex-col py-5">
     <div class="flex justify-end gap-4">
-      <span class="">infrared</span>
+      <span class="">{{ username }}</span>
     </div>
     <div
       class="h-full w-full bg-base-100 shadow-lg rounded-2xl mt-5 flex flex-col gap-10 px-10 py-5"
