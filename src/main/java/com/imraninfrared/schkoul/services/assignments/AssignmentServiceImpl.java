@@ -2,9 +2,11 @@ package com.imraninfrared.schkoul.services.assignments;
 
 import com.imraninfrared.schkoul.domain.dto.assignment.AssignmentRequestDTO;
 import com.imraninfrared.schkoul.domain.models.Assignments;
+import com.imraninfrared.schkoul.domain.models.SchkoulUser;
 import com.imraninfrared.schkoul.repository.AssignmentRepository;
 import com.imraninfrared.schkoul.domain.models.Course;
 import com.imraninfrared.schkoul.repository.CourseRepository;
+import com.imraninfrared.schkoul.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,10 +20,11 @@ import java.util.Optional;
 public class AssignmentServiceImpl implements AssignmentService {
     private final AssignmentRepository assignmentRepository;
     private final CourseRepository courseRepository;
+    private final UserRepository userRepository;
 
     @Override
-    public List<Assignments> getUnfinishedAssignments() {
-        return assignmentRepository.findByIsDoneFalse();
+    public List<Assignments> getUnfinishedAssignments(String username) {
+        return assignmentRepository.findByIsDoneFalse(username);
     }
 
     @Override
@@ -30,12 +33,14 @@ public class AssignmentServiceImpl implements AssignmentService {
     }
 
     @Override
-    public Assignments createAssignment(AssignmentRequestDTO assignmentDTO) {
+    public Assignments createAssignment(AssignmentRequestDTO assignmentDTO, String username) {
         Course course = courseRepository.findById(assignmentDTO.getCourseId()).orElse(null);
+        SchkoulUser user = userRepository.findByUsername(username).orElse(null);
         Assignments assignment = new Assignments();
         assignment.setTitle(assignmentDTO.getTitle());
         assignment.setDetails(assignmentDTO.getDetails());
         assignment.setCourse(course);
+        assignment.setCreatedBy(user);
         assignment.setDate(assignmentDTO.getDate());
         return assignmentRepository.save(assignment);
     }

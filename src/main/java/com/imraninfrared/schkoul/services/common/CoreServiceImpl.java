@@ -18,8 +18,8 @@ public class CoreServiceImpl implements CoreService {
     private final AssignmentRepository assignmentRepository;
 
     @Override
-    public List<AgendaResponseDTO> getAgendaOfMonth() {
-        List<Assignments> assignments = assignmentRepository.findAssignmentsForCurrentMonth();
+    public List<AgendaResponseDTO> getAgendaOfMonth(String username) {
+        List<Assignments> assignments = assignmentRepository.findAssignmentsForCurrentMonth(username);
         return assignments.stream()
             .map(assignment -> new AgendaResponseDTO(
                 assignment.getId(),

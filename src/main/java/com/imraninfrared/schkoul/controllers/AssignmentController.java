@@ -6,6 +6,8 @@ import com.imraninfrared.schkoul.services.assignments.AssignmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,8 +20,8 @@ public class AssignmentController {
     private final AssignmentService assignmentService;
 
     @GetMapping
-    public ResponseEntity<List<Assignments>> getUnfinishedAssignments() {
-        return new ResponseEntity<>(assignmentService.getUnfinishedAssignments(), HttpStatus.OK);
+    public ResponseEntity<List<Assignments>> getUnfinishedAssignments(@AuthenticationPrincipal UserDetails user) {
+        return new ResponseEntity<>(assignmentService.getUnfinishedAssignments(user.getUsername()), HttpStatus.OK);
     }
 
     @GetMapping("{courseId}")
@@ -28,8 +30,8 @@ public class AssignmentController {
     }
 
     @PostMapping
-    public ResponseEntity<Assignments> addAssignment(@RequestBody AssignmentRequestDTO assignmentDTO) {
-        return new ResponseEntity<>(assignmentService.createAssignment(assignmentDTO), HttpStatus.CREATED);
+    public ResponseEntity<Assignments> addAssignment(@RequestBody AssignmentRequestDTO assignmentDTO, @AuthenticationPrincipal UserDetails user) {
+        return new ResponseEntity<>(assignmentService.createAssignment(assignmentDTO, user.getUsername()), HttpStatus.CREATED);
     }
 
     @PatchMapping("{id}")

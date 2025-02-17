@@ -5,6 +5,8 @@ import com.imraninfrared.schkoul.services.course.CourseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,13 +20,13 @@ public class CourseController {
     private final CourseService courseService;
 
     @GetMapping
-    public ResponseEntity<List<Course>> getCourses() {
-        return new ResponseEntity<>(courseService.getCourses(), HttpStatus.OK);
+    public ResponseEntity<List<Course>> getCourses(@AuthenticationPrincipal UserDetails user) {
+        return new ResponseEntity<>(courseService.getCourses(user.getUsername()), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Course> createCourse(@RequestBody Course course) {
-        return new ResponseEntity<>(courseService.addCourse(course), HttpStatus.CREATED);
+    public ResponseEntity<Course> createCourse(@RequestBody Course course, @AuthenticationPrincipal UserDetails user) {
+        return new ResponseEntity<>(courseService.addCourse(course, user.getUsername()), HttpStatus.CREATED);
     }
 
     @PatchMapping("/{id}")

@@ -10,8 +10,19 @@ import java.util.List;
 @Repository
 public interface AssignmentRepository extends JpaRepository<Assignments, Long> {
     List<Assignments> findByCourse_Id(Long id);
-    List<Assignments> findByIsDoneFalse();
 
-    @Query("SELECT a from Assignments a where YEAR (a.date) = YEAR(CURRENT_DATE) AND MONTH(a.date) = MONTH(CURRENT_DATE)")
-    List<Assignments> findAssignmentsForCurrentMonth();
+    @Query(
+        "select a from Assignments a " +
+        "Join a.createdBy u where u.username = :username " +
+        "and a.isDone = false"
+    )
+    List<Assignments> findByIsDoneFalse(String username);
+
+    @Query(
+        "SELECT a from Assignments a " +
+        "JOIN a.createdBy u " +
+        "where u.username = :username " +
+        "and YEAR (a.date) = YEAR(CURRENT_DATE) AND MONTH(a.date) = MONTH(CURRENT_DATE)"
+    )
+    List<Assignments> findAssignmentsForCurrentMonth(String username);
 }

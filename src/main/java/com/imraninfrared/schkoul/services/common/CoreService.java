@@ -9,5 +9,5 @@ import java.util.List;
 @Service
 @Transactional
 public interface CoreService {
-    List<AgendaResponseDTO> getAgendaOfMonth();
+    List<AgendaResponseDTO> getAgendaOfMonth(String username);
 }

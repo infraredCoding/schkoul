@@ -5,8 +5,8 @@ import com.imraninfrared.schkoul.domain.models.Course;
 import java.util.List;
 
 public interface CourseService {
-    List<Course> getCourses();
-    Course addCourse(Course course);
+    List<Course> getCourses(String username);
+    Course addCourse(Course course, String username);
     boolean updateCourse(Course course);
     boolean deleteCourse(Long id);
 }

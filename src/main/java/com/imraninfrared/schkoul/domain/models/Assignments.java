@@ -24,4 +24,8 @@ public class Assignments {
     @ManyToOne
     @JoinColumn(name="course_id", nullable=false)
     private Course course;
+
+    @ManyToOne
+    @JoinColumn(name="created_by", referencedColumnName = "id")
+    private SchkoulUser createdBy;
 }
