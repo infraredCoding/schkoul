@@ -25,7 +25,14 @@ public class Course {
     @JsonIgnore
     private List<Assignments> assignmentsList;
 
+    @OneToMany(mappedBy="course", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Quiz> quizList;
+
     @ManyToOne
     @JoinColumn(name="created_by", referencedColumnName = "id")
     private SchkoulUser createdBy;
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    private List<MarksDistribution> marksDistributionList;
 }

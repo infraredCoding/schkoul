@@ -12,7 +12,9 @@ const logout = () => {
 </script>
 
 <template>
-  <div class="w-[350px] bg-base-100 shadow-lg min-h-full flex flex-col rounded-2xl gap-5 pt-5">
+  <div
+    class="w-[300px] bg-base-100 shadow-lg h-full flex flex-col rounded-2xl gap-5 pt-5 overflow-hidden"
+  >
     <RouterLink
       to="./"
       class="text-md text-center rounded-2xl px-5 py-3 mx-5"
@@ -23,7 +25,9 @@ const logout = () => {
     <RouterLink
       :to="{ name: 'courses' }"
       class="text-md text-center rounded-2xl px-5 py-3 mx-5 cursor-pointer"
-      :class="{ 'bg-accent text-white': route.path === '/courses' }"
+      :class="{
+        'bg-accent text-white': route.path === '/courses' || route.name === 'course-details',
+      }"
       >Courses</RouterLink
     >
 
@@ -34,6 +38,13 @@ const logout = () => {
       >Assignments</RouterLink
     >
 
+    <RouterLink
+      :to="{ name: 'quizzes' }"
+      class="text-md text-center rounded-2xl px-5 py-3 mx-5 cursor-pointer"
+      :class="{ 'bg-accent text-white': route.path === '/quizzes' }"
+      >Quizzes</RouterLink
+    >
+
     <button
       class="text-md text-center bg-slate-600/50 text-zinc-50 rounded-2xl px-5 py-3 mx-5 cursor-pointer"
       @click.prevent="logout()"
@@ -41,5 +52,7 @@ const logout = () => {
       Logout
     </button>
   </div>
-  <slot />
+  <div class="flex-1 overflow-auto p-5">
+    <slot />
+  </div>
 </template>

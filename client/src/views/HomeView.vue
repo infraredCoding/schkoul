@@ -18,14 +18,20 @@ const monthlyDue = ref([])
 onMounted(async () => {
   await api
     .get('/dashboard')
-    .then((res) => (monthlyDue.value = res.data))
+    .then((res) => {
+      console.log(res.data)
+      monthlyDue.value = res.data
+    })
     .catch((err) => console.log(err))
 })
 
 const calendarAttributes = computed(() =>
   monthlyDue.value.map((task) => ({
     dates: task.date,
-    highlight: { color: 'purple' },
+    highlight: {
+      color: task.type === 'assignment' ? 'indigo' : 'purple',
+      ...(task.completed && task.type === 'assignment' && { class: 'opacity-75' }),
+    },
     popover: {
       label: task.title,
     },
@@ -33,10 +39,11 @@ const calendarAttributes = computed(() =>
 )
 
 const weeklyDue = computed(() => {
-  return monthlyDue.value.filter((el) => {
-    const d = new Date(el.date)
-    return d.getDate() >= startOfWeek.getDate() && d.getDate() <= endOfWeek.getDate()
-  })
+  // return monthlyDue.value.filter((el) => {
+  //   const d = new Date(el.date)
+  //   return d.getDate() >= startOfWeek.getDate() && d.getDate() <= endOfWeek.getDate()
+  // })
+  return monthlyDue.value
 })
 
 const username = ref(localStorage.getItem('username') || 'N/A')
@@ -53,7 +60,7 @@ const username = ref(localStorage.getItem('username') || 'N/A')
           <h2 class="card-title">Agenda This Week</h2>
           <div class="flex flex-col gap-5">
             <div class="flex justify-between" v-for="task in weeklyDue" :key="task.title">
-              <h3 class="text-lg my-auto" :class="{ 'line-through': task.completed }">
+              <h3 class="text-lg my-auto">
                 {{ task.title }}
               </h3>
               <h3 class="my-auto">{{ task.course.code }}</h3>
@@ -61,7 +68,7 @@ const username = ref(localStorage.getItem('username') || 'N/A')
                 class="badge my-auto"
                 :class="{
                   'badge-primary': task.type == 'assignment',
-                  'badge-info': task.type == 'quiz',
+                  'bg-indigo-700 text-zinc-50': task.type == 'quiz',
                 }"
               >
                 {{ task.type }}

@@ -44,7 +44,7 @@ public class AssignmentController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Assignments> deleteAssignment(@PathVariable("id") Long id) {
+    public ResponseEntity<?> deleteAssignment(@PathVariable("id") Long id) {
         boolean res = assignmentService.deleteAssignment(id);
         if (res) {
             return new ResponseEntity<>(HttpStatus.OK);
@@ -54,7 +54,7 @@ public class AssignmentController {
 
 
     @PostMapping("{id}")
-    public ResponseEntity<String> toggleAssignmentStatus(@PathVariable("id") Long id) {
+    public ResponseEntity<?> toggleAssignmentStatus(@PathVariable("id") Long id) {
         assignmentService.toggleAssignmentStatus(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

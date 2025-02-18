@@ -1,5 +1,7 @@
 package com.imraninfrared.schkoul.controllers;
 
+import com.imraninfrared.schkoul.domain.dto.course.CourseDetailsDTO;
+import com.imraninfrared.schkoul.domain.dto.course.CourseListItemDTO;
 import com.imraninfrared.schkoul.domain.models.Course;
 import com.imraninfrared.schkoul.services.course.CourseService;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -20,8 +23,17 @@ public class CourseController {
     private final CourseService courseService;
 
     @GetMapping
-    public ResponseEntity<List<Course>> getCourses(@AuthenticationPrincipal UserDetails user) {
+    public ResponseEntity<List<CourseListItemDTO>> getCourses(@AuthenticationPrincipal UserDetails user) {
         return new ResponseEntity<>(courseService.getCourses(user.getUsername()), HttpStatus.OK);
+    }
+
+    @GetMapping("{courseId}")
+    public ResponseEntity<CourseDetailsDTO> getCourseById(@PathVariable("courseId") Long courseId) {
+        Optional<CourseDetailsDTO> course = courseService.getCourse(courseId);
+        if (course.isPresent()) {
+            return new ResponseEntity<>(course.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping
