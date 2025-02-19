@@ -28,4 +28,12 @@ public class Assignments {
     @ManyToOne
     @JoinColumn(name="created_by", referencedColumnName = "id")
     private SchkoulUser createdBy;
+
+    @Override
+    public String toString() {
+        return "Assignments{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                '}';
+    }
 }

@@ -19,11 +19,19 @@ public class MarksDistribution {
     private AssessmentType assessmentType;
 
     @ManyToOne
-    @JoinColumn(name="course_id", nullable=false)
+    @JoinColumn(name="course_id", nullable=true)
     @JsonIgnore
     private Course course;
 
     private float weight;
 
     private float marksAchieved;
+
+    @Override
+    public String toString() {
+        return "Assignments{" +
+                "id=" + id +
+                ", title='" + assessmentType + '\'' +
+                '}';
+    }
 }

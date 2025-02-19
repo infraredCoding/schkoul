@@ -34,7 +34,15 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Optional<CourseDetailsDTO> getCourse(Long id){
         Optional<Course> course = courseRepository.findById(id);
-        return Optional.ofNullable(modelMapper.map(course, CourseDetailsDTO.class));
+        if (course.isPresent()) {
+            return Optional.of(modelMapper.map(course.get(), CourseDetailsDTO.class));
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Course getCourseById(Long id){
+        return courseRepository.findById(id).orElse(null);
     }
 
     @Override

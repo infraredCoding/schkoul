@@ -10,6 +10,7 @@ import java.util.Optional;
 public interface CourseService {
     List<CourseListItemDTO> getCourses(String username);
     Optional<CourseDetailsDTO> getCourse(Long id);
+    Course getCourseById(Long id);
     Course addCourse(Course course, String username);
     boolean updateCourse(Course course);
     boolean deleteCourse(Long id);

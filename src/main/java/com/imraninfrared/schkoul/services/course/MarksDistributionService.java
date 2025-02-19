@@ -10,7 +10,8 @@ import java.util.List;
 @Transactional
 public interface MarksDistributionService {
     List<MarksDistribution> getMarksDistribution(Long courseId);
-    MarksDistribution createMarksDistribution(MarksDistribution marksDistribution);
+    MarksDistribution createMarksDistribution(MarksDistribution marksDistribution, Long courseId);
+    boolean updateMarks(Long id, float marks);
     boolean updateMarksDistribution(MarksDistribution marksDistribution);
     boolean deleteMarksDistribution(Long id);
 }
