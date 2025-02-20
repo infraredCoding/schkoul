@@ -119,6 +119,60 @@ const toggleUpdateMarks = (assessment) => {
   document.querySelector('#edit_md_marks')?.showModal()
 }
 
+// assignments
+const newAssignmentInfo = ref({
+  title: null,
+  details: null,
+  date: null,
+  courseId: route.params.id,
+})
+
+const selectedAssignment = ref({
+  id: null,
+  title: null,
+  details: null,
+  date: null,
+})
+
+const toggleAssignmentEditModal = (_selectedAssignment) => {
+  selectedAssignment.value = _selectedAssignment
+  document.querySelector('#update_assignment')?.showModal()
+}
+
+const toggleAssignmentDelModal = (_selectedAssignment) => {
+  selectedAssignment.value = _selectedAssignment
+  document.querySelector('#del_assignment')?.showModal()
+}
+
+// quizzes
+const newquizInfo = ref({
+  title: null,
+  syllabus: null,
+  date: null,
+  courseId: route.params.id,
+  marksAchieved: null,
+  totalMarks: null,
+})
+
+const selectedquiz = ref({
+  id: null,
+  title: null,
+  syllabus: null,
+  date: null,
+  marksAchieved: null,
+  totalMarks: null,
+})
+
+const toggleQuizEditModal = (_selectedquiz) => {
+  selectedquiz.value = _selectedquiz
+  document.querySelector('#update_quiz')?.showModal()
+}
+
+const toggleQuizDelModal = (_selectedquiz) => {
+  selectedquiz.value = _selectedquiz
+  document.querySelector('#del_quiz')?.showModal()
+}
+
 // api calls
 onMounted(async () => {
   await api
@@ -197,6 +251,128 @@ const updateMarks = async () => {
     .catch((err) => console.log(err))
 }
 
+// assignments
+const createAssignment = async () => {
+  await api
+    .post('/assignments', newAssignmentInfo.value)
+    .then((res) => {
+      course.value.assignmentsList.push(res.data)
+      newAssignmentInfo.value.title = null
+      newAssignmentInfo.value.details = null
+      newAssignmentInfo.value.date = null
+
+      document.querySelector('#add_assignment')?.close()
+    })
+    .catch((err) => console.log(err))
+}
+
+const updateAssignment = async () => {
+  await api
+    .patch(`/assignments/${selectedAssignment.value.id}`, selectedAssignment.value)
+    .then((res) => {
+      console.log(res)
+      const index = course.value.assignmentsList.findIndex(
+        (assignment) => assignment.id === selectedAssignment.value.id,
+      )
+      if (index !== -1) {
+        course.value.assignmentsList[index] = {
+          ...course.value.assignmentsList[index],
+          ...selectedAssignment.value,
+        }
+      }
+
+      selectedAssignment.value = {
+        id: null,
+        title: null,
+        details: null,
+        date: null,
+      }
+      document.querySelector('#update_assignment')?.close()
+    })
+    .catch((err) => console.log(err))
+}
+
+const deleteAssignment = async () => {
+  await api
+    .delete(`/assignments/${selectedAssignment.value.id}`)
+    .then((res) => {
+      course.value.assignmentsList = course.value.assignmentsList.filter(
+        (c) => c.id !== selectedAssignment.value.id,
+      )
+
+      selectedAssignment.value = {
+        id: null,
+        title: null,
+        details: null,
+        date: null,
+      }
+
+      document.querySelector('#del_assignment')?.close()
+    })
+    .catch((err) => console.log(err))
+}
+
+// quizzes
+const createquiz = async () => {
+  await api
+    .post('/quiz', newquizInfo.value)
+    .then((res) => {
+      course.value.quizList.push(res.data)
+      selectedquiz.value.title = null
+      selectedquiz.value.details = null
+      selectedquiz.value.date = null
+      selectedquiz.value.courseId = null
+      document.querySelector('#add_quiz')?.close()
+    })
+    .catch((err) => console.log(err))
+}
+
+const updatequiz = async () => {
+  await api
+    .patch(`/quiz/${selectedquiz.value.id}`, selectedquiz.value)
+    .then((res) => {
+      console.log(res)
+      const index = course.value.quizList.findIndex((quiz) => quiz.id === selectedquiz.value.id)
+      if (index !== -1) {
+        course.value.quizList[index] = {
+          ...course.value.quizList[index],
+          ...selectedquiz.value,
+        }
+      }
+      selectedquiz.value = {
+        id: null,
+        title: null,
+        syllabus: null,
+        date: null,
+        marksAchieved: null,
+        totalMarks: null,
+      }
+
+      document.querySelector('#update_quiz')?.close()
+    })
+    .catch((err) => console.log(err))
+}
+
+const deletequiz = async () => {
+  await api
+    .delete(`/quiz/${selectedquiz.value.id}`)
+    .then((res) => {
+      course.value.quizList = course.value.quizList.filter((c) => c.id !== selectedquiz.value.id)
+
+      selectedquiz.value = {
+        id: null,
+        title: null,
+        syllabus: null,
+        date: null,
+        marksAchieved: null,
+        totalMarks: null,
+      }
+
+      document.querySelector('#del_quiz')?.close()
+    })
+    .catch((err) => console.log(err))
+}
+
 const totalAssessmentMarks = computed(() => {
   return (
     course.value?.marksDistributionList?.reduce(
@@ -227,6 +403,11 @@ const getGrade = computed(() => {
   }
   return 'Invalid'
 })
+
+// utils
+const getDateDiff = (d) => {
+  return Math.ceil((new Date(d) - new Date()) / (1000 * 60 * 60 * 24))
+}
 
 const username = ref(localStorage.getItem('username') || 'N/A')
 </script>
@@ -472,11 +653,14 @@ const username = ref(localStorage.getItem('username') || 'N/A')
       </div>
 
       <div class="flex w-full gap-3 items-start">
+        <!-- Assignments -->
         <div class="card bg-base-100 w-1/2">
           <div class="card-body">
             <div class="card-title flex justify-between">
               Assignments
-              <button class="btn btn-primary">Add Assignment</button>
+              <button class="btn btn-primary" onclick="add_assignment.showModal()">
+                Add Assignment
+              </button>
             </div>
             <div class="overflow-x-auto">
               <table class="table">
@@ -535,7 +719,7 @@ const username = ref(localStorage.getItem('username') || 'N/A')
                       <div class="flex gap-3">
                         <button
                           class="btn btn-square btn-accent btn-sm"
-                          @click="toggleEditModal(assignment)"
+                          @click="toggleAssignmentEditModal(assignment)"
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -550,7 +734,83 @@ const username = ref(localStorage.getItem('username') || 'N/A')
                         </button>
                         <button
                           class="btn btn-square btn-sm btn-error"
-                          @click="toggleDelModal(assignment)"
+                          @click="toggleAssignmentDelModal(assignment)"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="w-5 h-5 fill-base-100"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                          >
+                            <path
+                              d="M17 6H22V8H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V8H2V6H7V3C7 2.44772 7.44772 2 8 2H16C16.5523 2 17 2.44772 17 3V6ZM18 8H6V20H18V8ZM9 11H11V17H9V11ZM13 11H15V17H13V11ZM9 4V6H15V4H9Z"
+                            ></path>
+                          </svg>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quizzes -->
+        <div class="card bg-base-100 w-1/2">
+          <div class="card-body">
+            <div class="card-title flex justify-between">
+              Quizzes
+              <button class="btn btn-primary" onclick="add_quiz.showModal()">Add Quiz</button>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="table">
+                <!-- head -->
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>Marks</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- row 1 -->
+                  <tr class="hover:bg-base-300" v-for="quiz in course.quizList" :key="quiz.id">
+                    <td>
+                      {{ quiz.title }}
+                    </td>
+                    <td>{{ quiz.marksAchieved }} / {{ quiz.totalMarks }}</td>
+                    <td class="flex flex-col">
+                      {{ new Date(quiz.date).toDateString() }}
+                      <div
+                        class="badge badge-error"
+                        v-if="getDateDiff(quiz.date) >= 0 && getDateDiff(quiz.date) < 3"
+                      >
+                        {{ getDateDiff(quiz.date) }}
+                        days remaining
+                      </div>
+                    </td>
+                    <td>
+                      <div class="flex gap-3">
+                        <button
+                          class="btn btn-square btn-accent btn-sm"
+                          @click="toggleQuizEditModal(quiz)"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="w-5 h-5 fill-base-100"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                          >
+                            <path
+                              d="M15.7279 9.57627L14.3137 8.16206L5 17.4758V18.89H6.41421L15.7279 9.57627ZM17.1421 8.16206L18.5563 6.74785L17.1421 5.33363L15.7279 6.74785L17.1421 8.16206ZM7.24264 20.89H3V16.6473L16.435 3.21231C16.8256 2.82179 17.4587 2.82179 17.8492 3.21231L20.6777 6.04074C21.0682 6.43126 21.0682 7.06443 20.6777 7.45495L7.24264 20.89Z"
+                            ></path>
+                          </svg>
+                        </button>
+                        <button
+                          class="btn btn-square btn-sm btn-error"
+                          @click="toggleQuizDelModal(quiz)"
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -573,7 +833,7 @@ const username = ref(localStorage.getItem('username') || 'N/A')
         </div>
       </div>
 
-      <!-- <dialog id="add_assignment" class="modal">
+      <dialog id="add_assignment" class="modal">
         <div class="modal-box">
           <form method="dialog">
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
@@ -598,23 +858,17 @@ const username = ref(localStorage.getItem('username') || 'N/A')
               placeholder="Date"
               class="input w-full"
             />
-            <select class="select w-full" v-model="newAssignmentInfo.courseId">
-              <option :value="null">Select course</option>
-              <option v-for="c in courses" :key="c.id" :value="c.id">
-                {{ c.code }}: {{ c.title }}
-              </option>
-            </select>
-            <button class="btn btn-primary" type="submit">Add Course</button>
+            <button class="btn btn-primary" type="submit">Add Assignment</button>
           </form>
         </div>
-      </dialog> -->
+      </dialog>
 
-      <!-- <dialog id="update_assignment" class="modal">
+      <dialog id="update_assignment" class="modal">
         <div class="modal-box">
           <form method="dialog">
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
           </form>
-          <h3 class="text-lg font-bold mb-5">Edit Course</h3>
+          <h3 class="text-lg font-bold mb-5">Edit Assignment</h3>
           <form @submit.prevent="updateAssignment()" class="flex flex-col gap-5">
             <input
               type="text"
@@ -637,20 +891,107 @@ const username = ref(localStorage.getItem('username') || 'N/A')
             <button class="btn btn-primary" type="submit">Save Changes</button>
           </form>
         </div>
-      </dialog> -->
+      </dialog>
 
-      <!-- <dialog id="del_assignment" class="modal">
+      <dialog id="del_assignment" class="modal">
         <div class="modal-box">
           <form method="dialog">
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
           </form>
-          <h3 class="text-lg font-bold mb-5">Delete Course</h3>
+          <h3 class="text-lg font-bold mb-5">Delete Assignment</h3>
           <p>
             Are you sure you want to permanently delete assignment {{ selectedAssignment.title }} ?
           </p>
           <button class="btn btn-error" @click.prevent="deleteAssignment()">Yes Delete</button>
         </div>
-      </dialog> -->
+      </dialog>
+
+      <dialog id="add_quiz" class="modal">
+        <div class="modal-box">
+          <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+          </form>
+          <h3 class="text-lg font-bold mb-5">Add New quiz</h3>
+          <form @submit.prevent="createquiz()" class="flex flex-col gap-5">
+            <input
+              type="text"
+              v-model="newquizInfo.title"
+              placeholder="Title"
+              class="input w-full"
+            />
+            <input
+              type="text"
+              v-model="newquizInfo.syllabus"
+              placeholder="Syllabus"
+              class="input w-full"
+            />
+            <input
+              type="text"
+              v-model="newquizInfo.totalMarks"
+              placeholder="Total Marks (Optional)"
+              class="input w-full"
+            />
+            <input type="date" v-model="newquizInfo.date" placeholder="Date" class="input w-full" />
+
+            <button class="btn btn-primary" type="submit">Add Quiz</button>
+          </form>
+        </div>
+      </dialog>
+
+      <dialog id="update_quiz" class="modal">
+        <div class="modal-box">
+          <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+          </form>
+          <h3 class="text-lg font-bold mb-5">Edit Quiz</h3>
+          <form @submit.prevent="updatequiz()" class="flex flex-col gap-5">
+            <input
+              type="text"
+              v-model="selectedquiz.title"
+              placeholder="Title"
+              class="input w-full"
+            />
+            <input
+              type="text"
+              v-model="selectedquiz.syllabus"
+              placeholder="Syllabus"
+              class="input w-full"
+            />
+            <input
+              type="text"
+              v-model="selectedquiz.marksAchieved"
+              placeholder="Marks Achieved (Optional)"
+              class="input w-full"
+            />
+
+            <input
+              type="text"
+              v-model="selectedquiz.totalMarks"
+              placeholder="Total Marks (Optional)"
+              class="input w-full"
+            />
+            <input
+              type="date"
+              v-model="selectedquiz.date"
+              placeholder="Date"
+              class="input w-full"
+            />
+
+            <button class="btn btn-primary" type="submit">Save Changes</button>
+          </form>
+        </div>
+      </dialog>
+
+      <dialog id="del_quiz" class="modal">
+        <div class="modal-box">
+          <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+          </form>
+          <h3 class="text-lg font-bold mb-5">Delete Quiz</h3>
+          <p>Are you sure you want to permanently delete quiz {{ selectedquiz.title }} ?</p>
+          <button class="btn btn-error" @click.prevent="deletequiz()">Yes Delete</button>
+        </div>
+      </dialog>
     </div>
   </div>
 

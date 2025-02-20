@@ -62,6 +62,7 @@ const createAssignment = async () => {
       newAssignmentInfo.value.details = null
       newAssignmentInfo.value.date = null
       newAssignmentInfo.value.courseId = null
+      document.querySelector('#add_assignment')?.close()
     })
     .catch((err) => console.log(err))
 }
@@ -95,6 +96,8 @@ const deleteAssignment = async () => {
       newAssignmentInfo.value.title = null
       newAssignmentInfo.value.details = null
       newAssignmentInfo.value.date = null
+
+      document.querySelector('#del_assignment')?.close()
     })
     .catch((err) => console.log(err))
 }
@@ -160,7 +163,7 @@ const username = ref(localStorage.getItem('username') || 'N/A')
                 {{ c.code }}: {{ c.title }}
               </option>
             </select>
-            <button class="btn btn-primary" type="submit">Add Course</button>
+            <button class="btn btn-primary" type="submit">Add Assignment</button>
           </form>
         </div>
       </dialog>
@@ -170,7 +173,7 @@ const username = ref(localStorage.getItem('username') || 'N/A')
           <form method="dialog">
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
           </form>
-          <h3 class="text-lg font-bold mb-5">Edit Course</h3>
+          <h3 class="text-lg font-bold mb-5">Edit Assignment</h3>
           <form @submit.prevent="updateAssignment()" class="flex flex-col gap-5">
             <input
               type="text"
@@ -200,7 +203,7 @@ const username = ref(localStorage.getItem('username') || 'N/A')
           <form method="dialog">
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
           </form>
-          <h3 class="text-lg font-bold mb-5">Delete Course</h3>
+          <h3 class="text-lg font-bold mb-5">Delete Assignment</h3>
           <p>
             Are you sure you want to permanently delete assignment {{ selectedAssignment.title }} ?
           </p>

@@ -16,7 +16,7 @@ const logout = () => {
     class="w-[300px] bg-base-100 shadow-lg h-full flex flex-col rounded-2xl gap-5 pt-5 overflow-hidden"
   >
     <RouterLink
-      to="./"
+      to="/"
       class="text-md text-center rounded-2xl px-5 py-3 mx-5"
       :class="{ 'bg-accent text-white': route.path === '/' }"
       >Dashboard</RouterLink

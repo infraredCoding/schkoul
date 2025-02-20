@@ -34,6 +34,11 @@ const toggleDelModal = (_selectedquiz) => {
   document.querySelector('#del_quiz')?.showModal()
 }
 
+// utils
+const getDateDiff = (d) => {
+  return Math.ceil((new Date(d) - new Date()) / (1000 * 60 * 60 * 24))
+}
+
 onMounted(async () => {
   await api
     .get('/quiz')
@@ -245,12 +250,7 @@ const username = ref(localStorage.getItem('username') || 'N/A')
           </thead>
           <tbody>
             <!-- row 1 -->
-            <tr
-              class="hover:bg-base-300"
-              v-for="quiz in quizes"
-              :key="quiz.id"
-              :class="{ 'line-through': quiz.done }"
-            >
+            <tr class="hover:bg-base-300" v-for="quiz in quizes" :key="quiz.id">
               <td>
                 {{ quiz.title }}
               </td>
@@ -260,9 +260,9 @@ const username = ref(localStorage.getItem('username') || 'N/A')
                 {{ new Date(quiz.date).toDateString() }}
                 <div
                   class="badge badge-error"
-                  v-if="Math.ceil((new Date(quiz.date) - new Date()) / (1000 * 60 * 60 * 24)) < 3"
+                  v-if="getDateDiff(quiz.date) >= 0 && getDateDiff(quiz.date) < 3"
                 >
-                  {{ Math.ceil((new Date(quiz.date) - new Date()) / (1000 * 60 * 60 * 24)) }}
+                  {{ getDateDiff(quiz.date) }}
                   days remaining
                 </div>
               </td>
