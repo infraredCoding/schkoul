@@ -1,4 +1,26 @@
 @import 'tailwindcss';
+
 @plugin "daisyui" {
   themes: all;
+}
+
+@theme {
+  --font-display: 'Poppins', 'serif';
+  --font-brand: 'Lobster', serif;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 100 200 300 400 500 600 700 800;
+  font-display: swap;
+  src: url('@/assets/Poppins-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'Lobster';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('@/assets/Lobster-Regular.ttf');
 }

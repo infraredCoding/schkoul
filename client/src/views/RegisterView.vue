@@ -41,7 +41,7 @@ const registerUser = async () => {
     <div class="mx-auto card bg-base-100 w-1/3 text-center">
       <div class="card-body items-center text-center flex flex-col">
         <h2 class="card-title text-center">Sign Up to</h2>
-        <h1 class="text-3xl">Schkoul</h1>
+        <h1 class="text-4xl font-brand">Schkoul</h1>
 
         <div v-for="e in errors" :key="e" role="alert" class="alert alert-error">
           {{ e }}

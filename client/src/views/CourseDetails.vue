@@ -414,10 +414,11 @@ const username = ref(localStorage.getItem('username') || 'N/A')
 
 <template>
   <div class="w-full flex flex-col py-5">
-    <div class="flex justify-end gap-4">
+    <div class="flex justify-between gap-4">
+      <h1 class="font-brand text-4xl text-slate-900">Schkoul</h1>
       <span class="">{{ username }}</span>
     </div>
-    <div class="w-full mt-5 flex flex-col gap-7 px-10 py-5">
+    <div class="w-full mt-5 flex flex-col gap-7 py-5">
       <div class="flex justify-between">
         <div class="flex gap-2">
           <h2 class="text-3xl font-bold my-auto">
