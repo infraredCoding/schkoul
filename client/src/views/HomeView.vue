@@ -1,6 +1,6 @@
 <script setup>
 import api from '@/axios'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, defineProps } from 'vue'
 
 const today = new Date()
 const dayOfWeek = today.getDay()
@@ -45,22 +45,112 @@ const weeklyDue = computed(() => {
   // })
   return monthlyDue.value
 })
-
 const username = ref(localStorage.getItem('username') || 'N/A')
+const props = defineProps(['isSidebarOpen'])
+const emit = defineEmits(['toggleSidebar'])
 </script>
 
 <template>
   <div class="w-full">
     <div class="flex justify-between gap-4 mb-5">
-      <h1 class="font-brand text-4xl text-slate-900">Schkoul</h1>
+      <div class="flex gap-2">
+        <button
+          class="bg-primary text-zinc-50 p-2 rounded-full px-3 shadow-md z-40"
+          @click="emit('toggleSidebar')"
+        >
+          <span v-if="props.isSidebarOpen">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-5 h-4"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+            >
+              <path
+                d="M4.83582 12L11.0429 18.2071L12.4571 16.7929L7.66424 12L12.4571 7.20712L11.0429 5.79291L4.83582 12ZM10.4857 12L16.6928 18.2071L18.107 16.7929L13.3141 12L18.107 7.20712L16.6928 5.79291L10.4857 12Z"
+              ></path>
+            </svg>
+          </span>
+          <span v-else>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-5 h-4"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+            >
+              <path
+                d="M19.1642 12L12.9571 5.79291L11.5429 7.20712L16.3358 12L11.5429 16.7929L12.9571 18.2071L19.1642 12ZM13.5143 12L7.30722 5.79291L5.89301 7.20712L10.6859 12L5.89301 16.7929L7.30722 18.2071L13.5143 12Z"
+              ></path>
+            </svg>
+          </span>
+        </button>
+        <h1 class="font-brand text-4xl text-slate-900">Schkoul</h1>
+      </div>
       <span class="">{{ username }}</span>
     </div>
-    <div class="flex gap-5 items-start">
-      <div class="w-3/5 card bg-base-100">
+    <div class="flex gap-5 items-start flex-col lg:flex-row">
+      <div class="lg:w-3/5 w-full card bg-base-100 sm:text-xs">
         <div class="card-body">
           <h2 class="card-title">Agenda This Week</h2>
-          <div class="flex flex-col gap-5">
-            <div class="flex justify-between" v-for="task in weeklyDue" :key="task.title">
+          <div class="overflow-x-auto">
+            <table class="table">
+              <!-- head -->
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Course</th>
+                  <th>Type</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="hover:bg-base-300" v-for="task in weeklyDue" :key="task.title">
+                  <th>{{ task.title }}</th>
+                  <td>{{ task.course.code }}</td>
+                  <td>
+                    <div
+                      class="badge my-auto"
+                      :class="{
+                        'badge-primary': task.type == 'assignment',
+                        'bg-indigo-700 text-zinc-50': task.type == 'quiz',
+                      }"
+                    >
+                      {{ task.type }}
+                    </div>
+                  </td>
+                  <td>
+                    <div class="flex flex-col gap-1 my-auto">
+                      {{ new Date(task.date).toDateString() }}
+                      <div
+                        class="badge badge-warning"
+                        v-if="
+                          calculateDateDiff(task.date) > 0 &&
+                          calculateDateDiff(task.date) < 3 &&
+                          !task.completed
+                        "
+                      >
+                        {{ calculateDateDiff(task.date) }}
+                        days remaining
+                      </div>
+                      <div
+                        class="badge badge-success"
+                        v-if="(calculateDateDiff(task.date) == 0) & !task.completed"
+                      >
+                        Due Today
+                      </div>
+                      <div
+                        class="badge badge-error"
+                        v-if="(calculateDateDiff(task.date) < 0) & !task.completed"
+                      >
+                        Overdue
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- <div class="flex flex-col gap-2">
+            <div class="flex justify-between gap-10" v-for="task in weeklyDue" :key="task.title">
               <h3 class="text-lg my-auto">
                 {{ task.title }}
               </h3>
@@ -101,11 +191,11 @@ const username = ref(localStorage.getItem('username') || 'N/A')
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
 
-      <div class="w-2/5 card bg-base-100">
+      <div class="lg:w-2/5 w-full card bg-base-100">
         <VCalendar expanded :attributes="calendarAttributes" />
       </div>
     </div>

@@ -1,5 +1,6 @@
 <script setup>
 import router from '@/router'
+import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
@@ -9,11 +10,14 @@ const logout = () => {
   localStorage.removeItem('username')
   router.push({ path: '/login' })
 }
+
+const props = defineProps(['isSidebarOpen'])
 </script>
 
 <template>
   <div
-    class="w-[300px] bg-base-100 shadow-lg h-full flex flex-col rounded-2xl gap-5 pt-5 overflow-hidden"
+    class="bg-base-100 shadow-lg h-full flex flex-col rounded-2xl gap-5 pt-5 transition-all duration-150 relative"
+    :class="props.isSidebarOpen ? 'w-[300px]' : 'w-0 overflow-hidden'"
   >
     <RouterLink
       to="/"

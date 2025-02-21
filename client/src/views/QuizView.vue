@@ -1,7 +1,7 @@
 <script setup>
 import api from '@/axios'
 import axios from 'axios'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, defineProps, defineEmits } from 'vue'
 
 const quizes = ref([])
 const courses = ref([])
@@ -118,12 +118,45 @@ const deletequiz = async () => {
 }
 
 const username = ref(localStorage.getItem('username') || 'N/A')
+const props = defineProps(['isSidebarOpen'])
+const emit = defineEmits(['toggleSidebar'])
 </script>
 
 <template>
   <div class="w-full flex flex-col py-5">
     <div class="flex justify-between gap-4">
-      <h1 class="font-brand text-4xl text-slate-900">Schkoul</h1>
+      <div class="flex gap-2">
+        <button
+          class="bg-primary text-zinc-50 p-2 rounded-full px-3 shadow-md z-40"
+          @click="emit('toggleSidebar')"
+        >
+          <span v-if="props.isSidebarOpen">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-5 h-4"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+            >
+              <path
+                d="M4.83582 12L11.0429 18.2071L12.4571 16.7929L7.66424 12L12.4571 7.20712L11.0429 5.79291L4.83582 12ZM10.4857 12L16.6928 18.2071L18.107 16.7929L13.3141 12L18.107 7.20712L16.6928 5.79291L10.4857 12Z"
+              ></path>
+            </svg>
+          </span>
+          <span v-else>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-5 h-4"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+            >
+              <path
+                d="M19.1642 12L12.9571 5.79291L11.5429 7.20712L16.3358 12L11.5429 16.7929L12.9571 18.2071L19.1642 12ZM13.5143 12L7.30722 5.79291L5.89301 7.20712L10.6859 12L5.89301 16.7929L7.30722 18.2071L13.5143 12Z"
+              ></path>
+            </svg>
+          </span>
+        </button>
+        <h1 class="font-brand text-4xl text-slate-900">Schkoul</h1>
+      </div>
       <span class="">{{ username }}</span>
     </div>
     <div
@@ -231,7 +264,7 @@ const username = ref(localStorage.getItem('username') || 'N/A')
           <form method="dialog">
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
           </form>
-          <h3 class="text-lg font-bold mb-5">Delete Course</h3>
+          <h3 class="text-lg font-bold mb-5">Delete Quiz</h3>
           <p>Are you sure you want to permanently delete quiz {{ selectedquiz.title }} ?</p>
           <button class="btn btn-error" @click.prevent="deletequiz()">Yes Delete</button>
         </div>
@@ -260,7 +293,7 @@ const username = ref(localStorage.getItem('username') || 'N/A')
               <td class="flex flex-col">
                 {{ new Date(quiz.date).toDateString() }}
                 <div
-                  class="badge badge-error"
+                  class="badge badge-error py-5"
                   v-if="getDateDiff(quiz.date) >= 0 && getDateDiff(quiz.date) < 3"
                 >
                   {{ getDateDiff(quiz.date) }}

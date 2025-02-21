@@ -1,6 +1,6 @@
 <script setup>
 import api from '@/axios'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, defineProps, defineEmits } from 'vue'
 import { useRoute } from 'vue-router'
 
 const course = ref({})
@@ -410,12 +410,45 @@ const getDateDiff = (d) => {
 }
 
 const username = ref(localStorage.getItem('username') || 'N/A')
+const props = defineProps(['isSidebarOpen'])
+const emit = defineEmits(['toggleSidebar'])
 </script>
 
 <template>
   <div class="w-full flex flex-col py-5">
     <div class="flex justify-between gap-4">
-      <h1 class="font-brand text-4xl text-slate-900">Schkoul</h1>
+      <div class="flex gap-2">
+        <button
+          class="bg-primary text-zinc-50 p-2 rounded-full px-3 shadow-md z-40"
+          @click="emit('toggleSidebar')"
+        >
+          <span v-if="props.isSidebarOpen">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-5 h-4"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+            >
+              <path
+                d="M4.83582 12L11.0429 18.2071L12.4571 16.7929L7.66424 12L12.4571 7.20712L11.0429 5.79291L4.83582 12ZM10.4857 12L16.6928 18.2071L18.107 16.7929L13.3141 12L18.107 7.20712L16.6928 5.79291L10.4857 12Z"
+              ></path>
+            </svg>
+          </span>
+          <span v-else>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-5 h-4"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+            >
+              <path
+                d="M19.1642 12L12.9571 5.79291L11.5429 7.20712L16.3358 12L11.5429 16.7929L12.9571 18.2071L19.1642 12ZM13.5143 12L7.30722 5.79291L5.89301 7.20712L10.6859 12L5.89301 16.7929L7.30722 18.2071L13.5143 12Z"
+              ></path>
+            </svg>
+          </span>
+        </button>
+        <h1 class="font-brand text-4xl text-slate-900">Schkoul</h1>
+      </div>
       <span class="">{{ username }}</span>
     </div>
     <div class="w-full mt-5 flex flex-col gap-7 py-5">
@@ -572,8 +605,8 @@ const username = ref(localStorage.getItem('username') || 'N/A')
         </div>
       </dialog>
 
-      <div class="flex w-full gap-3">
-        <div class="grid grid-cols-4 gap-3 w-5/6">
+      <div class="flex flex-col lg:flex-row w-full gap-3">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-3 lg:w-5/6 w-full">
           <div
             class="card bg-base-100"
             v-for="assessment in course.marksDistributionList"
@@ -604,7 +637,7 @@ const username = ref(localStorage.getItem('username') || 'N/A')
           </div>
         </div>
 
-        <div class="w-1/6">
+        <div class="lg:w-1/6 w-full">
           <div class="card bg-base-100 w-full">
             <div class="card-body mx-auto">
               <div class="card-title flex justify-between">
@@ -653,9 +686,9 @@ const username = ref(localStorage.getItem('username') || 'N/A')
         </div>
       </div>
 
-      <div class="flex w-full gap-3 items-start">
+      <div class="flex lg:flex-row flex-col w-full gap-3 items-start">
         <!-- Assignments -->
-        <div class="card bg-base-100 w-1/2">
+        <div class="card bg-base-100 w-full lg:w-1/2">
           <div class="card-body">
             <div class="card-title flex justify-between">
               Assignments
@@ -701,7 +734,7 @@ const username = ref(localStorage.getItem('username') || 'N/A')
                     <td class="flex flex-col">
                       {{ new Date(assignment.date).toDateString() }}
                       <div
-                        class="badge badge-error"
+                        class="badge badge-error py-5"
                         v-if="
                           Math.ceil(
                             (new Date(assignment.date) - new Date()) / (1000 * 60 * 60 * 24),
@@ -758,7 +791,7 @@ const username = ref(localStorage.getItem('username') || 'N/A')
         </div>
 
         <!-- Quizzes -->
-        <div class="card bg-base-100 w-1/2">
+        <div class="card bg-base-100 w-full lg:w-1/2">
           <div class="card-body">
             <div class="card-title flex justify-between">
               Quizzes
@@ -785,7 +818,7 @@ const username = ref(localStorage.getItem('username') || 'N/A')
                     <td class="flex flex-col">
                       {{ new Date(quiz.date).toDateString() }}
                       <div
-                        class="badge badge-error"
+                        class="badge badge-error py-5"
                         v-if="getDateDiff(quiz.date) >= 0 && getDateDiff(quiz.date) < 3"
                       >
                         {{ getDateDiff(quiz.date) }}

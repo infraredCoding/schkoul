@@ -25,8 +25,8 @@ const attemptLogin = async () => {
 }
 </script>
 <template>
-  <div class="w-full h-full flex flex-col justify-center bg-base-200">
-    <div class="mx-auto card bg-base-100 w-1/3 text-center">
+  <div class="w-full h-full flex flex-col align-middle justify-center bg-base-200">
+    <div class="card mx-auto bg-base-100 lg:w-1/3 md:w-1/2 w-[90%] text-center">
       <div class="card-body items-center text-center flex flex-col">
         <h2 class="card-title text-center">Login To</h2>
         <h1 class="text-4xl font-brand">Schkoul</h1>
