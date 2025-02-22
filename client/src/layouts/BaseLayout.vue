@@ -55,6 +55,10 @@ const props = defineProps(['isSidebarOpen'])
     >
       Logout
     </button>
+
+    <span class="text-xs absolute bottom-2 pl-5"
+      >Made with ❤️ by <a class="link" href="https://www.imraninfrared.com">infraredCoding</a></span
+    >
   </div>
   <div class="flex-1 overflow-auto p-5">
     <slot />

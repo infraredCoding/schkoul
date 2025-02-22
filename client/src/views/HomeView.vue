@@ -103,7 +103,16 @@ const emit = defineEmits(['toggleSidebar'])
                 </tr>
               </thead>
               <tbody>
-                <tr class="hover:bg-base-300" v-for="task in weeklyDue" :key="task.title">
+                <tr
+                  class="hover:bg-base-300"
+                  v-for="task in weeklyDue"
+                  :key="task.title"
+                  :class="{
+                    'line-through':
+                      (task.type == 'assignment' && task.completed) ||
+                      (task.type == 'quiz' && calculateDateDiff(task.date) < 0),
+                  }"
+                >
                   <th>{{ task.title }}</th>
                   <td>{{ task.course.code }}</td>
                   <td>
@@ -123,9 +132,13 @@ const emit = defineEmits(['toggleSidebar'])
                       <div
                         class="badge badge-warning"
                         v-if="
-                          calculateDateDiff(task.date) > 0 &&
-                          calculateDateDiff(task.date) < 3 &&
-                          !task.completed
+                          (task.type == 'assignment' &&
+                            calculateDateDiff(task.date) > 0 &&
+                            calculateDateDiff(task.date) < 3 &&
+                            !task.completed) ||
+                          (task.type == 'quiz' &&
+                            calculateDateDiff(task.date) > 0 &&
+                            calculateDateDiff(task.date) < 3)
                         "
                       >
                         {{ calculateDateDiff(task.date) }}
@@ -133,13 +146,22 @@ const emit = defineEmits(['toggleSidebar'])
                       </div>
                       <div
                         class="badge badge-success"
-                        v-if="(calculateDateDiff(task.date) == 0) & !task.completed"
+                        v-if="
+                          (task.type == 'assignment' &&
+                            calculateDateDiff(task.date) == 0 &&
+                            !task.completed) ||
+                          (task.type == 'quiz' && calculateDateDiff(task.date) == 0)
+                        "
                       >
                         Due Today
                       </div>
                       <div
                         class="badge badge-error"
-                        v-if="(calculateDateDiff(task.date) < 0) & !task.completed"
+                        v-if="
+                          task.type == 'assignment' &&
+                          calculateDateDiff(task.date) < 0 &&
+                          !task.completed
+                        "
                       >
                         Overdue
                       </div>
