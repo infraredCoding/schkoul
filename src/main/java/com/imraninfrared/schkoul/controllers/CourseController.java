@@ -20,7 +20,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/course")
-@CrossOrigin(origins = "http://localhost:5173")
 @RequiredArgsConstructor
 public class CourseController {
     private final CourseService courseService;
