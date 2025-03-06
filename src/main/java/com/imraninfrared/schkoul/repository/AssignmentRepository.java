@@ -19,6 +19,14 @@ public interface AssignmentRepository extends JpaRepository<Assignments, Long> {
     List<Assignments> findByIsDoneFalse(String username);
 
     @Query(
+            "SELECT a from Assignments a " +
+            "JOIN a.createdBy u " +
+            "where u.username = :username " +
+            "and YEAR (a.date) = :year AND MONTH(a.date) = :month"
+    )
+    List<Assignments> findAssignmentsForMonth(String username, int year, int month);
+
+    @Query(
         "SELECT a from Assignments a " +
         "JOIN a.createdBy u " +
         "where u.username = :username " +

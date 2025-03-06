@@ -10,4 +10,6 @@ import java.util.List;
 @Transactional
 public interface CoreService {
     List<AgendaResponseDTO> getAgendaOfMonth(String username);
+
+    List<AgendaResponseDTO> getAgendaOfSelectedMonth(String username, int year, int month);
 }

@@ -125,7 +125,7 @@ const emit = defineEmits(['toggleSidebar'])
     <div
       class="h-full w-full bg-base-100 shadow-lg rounded-2xl mt-5 flex flex-col gap-10 px-10 py-5"
     >
-      <div class="flex justify-between">
+      <div class="flex md:justify-between flex-col md:flex-row gap-2 items-start">
         <h2 class="text-3xl font-bold">My Courses</h2>
         <button class="btn btn-primary" onclick="add_course.showModal()">
           <svg

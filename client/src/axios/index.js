@@ -2,8 +2,8 @@ import router from '@/router'
 import axios from 'axios'
 
 const api = axios.create({
-  // baseURL: 'http://127.0.0.1:8080/api/v1',
-  baseURL: 'https://schkoul.imraninfrared.com/api/v1',
+  baseURL: 'http://127.0.0.1:8080/api/v1',
+  // baseURL: 'https://schkoul.imraninfrared.com/api/v1',
   headers: {
     'Content-Type': 'application/json',
   },

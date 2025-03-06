@@ -1,5 +1,6 @@
 <script setup>
 import api from '@/axios'
+import axios from 'axios'
 import { computed, onMounted, ref, defineProps } from 'vue'
 
 const today = new Date()
@@ -14,6 +15,7 @@ const calculateDateDiff = (date) => {
 }
 
 const monthlyDue = ref([])
+const initMonthlyValue = ref([])
 
 onMounted(async () => {
   await api
@@ -21,6 +23,7 @@ onMounted(async () => {
     .then((res) => {
       console.log(res.data)
       monthlyDue.value = res.data
+      initMonthlyValue.value = res.data
     })
     .catch((err) => console.log(err))
 })
@@ -38,13 +41,23 @@ const calendarAttributes = computed(() =>
   })),
 )
 
+const fetchAgenda = (e) => {
+  api
+    .get(`agenda-of-month/${e[0].year}/${e[0].month}`)
+    .then((res) => {
+      monthlyDue.value = res.data
+    })
+    .catch((err) => console.log(err))
+}
+
 const weeklyDue = computed(() => {
-  // return monthlyDue.value.filter((el) => {
-  //   const d = new Date(el.date)
-  //   return d.getDate() >= startOfWeek.getDate() && d.getDate() <= endOfWeek.getDate()
-  // })
-  return monthlyDue.value
+  const currMonthVal = [...initMonthlyValue.value]
+  return currMonthVal.filter((el) => {
+    const d = new Date(el.date)
+    return d.getDate() >= startOfWeek.getDate() && d.getDate() <= endOfWeek.getDate()
+  })
 })
+
 const username = ref(localStorage.getItem('username') || 'N/A')
 const props = defineProps(['isSidebarOpen'])
 const emit = defineEmits(['toggleSidebar'])
@@ -218,7 +231,7 @@ const emit = defineEmits(['toggleSidebar'])
       </div>
 
       <div class="lg:w-2/5 w-full card bg-base-100">
-        <VCalendar expanded :attributes="calendarAttributes" />
+        <VCalendar expanded :attributes="calendarAttributes" @did-move="fetchAgenda" />
       </div>
     </div>
   </div>

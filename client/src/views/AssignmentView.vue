@@ -151,7 +151,7 @@ const emit = defineEmits(['toggleSidebar'])
     <div
       class="h-full w-full bg-base-100 shadow-lg rounded-2xl mt-5 flex flex-col gap-10 px-10 py-5"
     >
-      <div class="flex justify-between">
+      <div class="flex justify-between flex-col md:flex-row gap-2 items-start">
         <h2 class="text-3xl font-bold">Due Assignments</h2>
         <button class="btn btn-primary" onclick="add_assignment.showModal()">
           <svg
@@ -285,7 +285,7 @@ const emit = defineEmits(['toggleSidebar'])
               <td class="flex flex-col">
                 {{ new Date(assignment.date).toDateString() }}
                 <div
-                  class="badge badge-error py-5"
+                  class="badge badge-error py-5 text-xs"
                   v-if="
                     Math.ceil((new Date(assignment.date) - new Date()) / (1000 * 60 * 60 * 24)) < 3
                   "

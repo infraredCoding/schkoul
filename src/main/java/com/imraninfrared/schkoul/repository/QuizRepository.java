@@ -18,6 +18,15 @@ public interface QuizRepository extends JpaRepository<Quiz, Long> {
     )
     List<Quiz> findQuizzesForCurrentMonth(String username);
 
+
+    @Query(
+            "SELECT q from Quiz q " +
+            "JOIN q.createdBy u " +
+            "where u.username = :username " +
+            "and YEAR (q.date) = :year AND MONTH(q.date) = :month"
+    )
+    List<Quiz> findQuizzesForMonth(String username, int year, int month);
+
     @Query(
         "SELECT q from Quiz q " +
         "JOIN q.createdBy u " +

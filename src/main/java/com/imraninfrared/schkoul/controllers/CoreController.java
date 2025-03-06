@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/")
+@RequestMapping("api/v1")
 @Service
 @RequiredArgsConstructor
 public class CoreController {
@@ -37,6 +37,11 @@ public class CoreController {
     @GetMapping("dashboard")
     public ResponseEntity<List<AgendaResponseDTO>> dashboard(@AuthenticationPrincipal UserDetails user) {
         return new ResponseEntity<>(coreService.getAgendaOfMonth(user.getUsername()), HttpStatus.OK);
+    }
+
+    @GetMapping("agenda-of-month/{year}/{month}")
+    public ResponseEntity<List<AgendaResponseDTO>> getItemsOfMonth(@AuthenticationPrincipal UserDetails user, @PathVariable("year") int year, @PathVariable("month") int month) {
+        return new ResponseEntity<>(coreService.getAgendaOfSelectedMonth(user.getUsername(), year, month), HttpStatus.OK);
     }
 
     @PostMapping("auth/register")

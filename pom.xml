@@ -12,6 +12,7 @@
 	<artifactId>schkoul</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>schkoul</name>
+	<packaging>jar</packaging>
 	<description>A Student&apos;s huntbook</description>
 	<url/>
 	<licenses>
